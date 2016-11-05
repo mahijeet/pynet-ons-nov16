@@ -2,61 +2,79 @@
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from pprint import pprint
-
+from getpass import getpass
 from pynxos.device import Device
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+nexus_ip = "153.92.39.181"
+nxs_test = Device(host=nexus_ip, username="pyclass", password=getpass(),
+                  transport='https', port=8443)
 
+#### FACTS
+print "\nFacts"
+print '-' * 50
+pprint(nxs_test.facts)
+raw_input("\n\nHit a key to continue: ")
 
-if __name__ == "__main__":
-    nexus_ip = "85.190.182.85"
-    nxs_test = Device(host=nexus_ip, username="pyclass", password="88newclass",
-                      transport='https', port=8443)
+###### SHOW
+print "\nShow hostname"
+print '-' * 50
+print nxs_test.show("show hostname")
+print '-' * 50
+raw_input("\n\nHit a key to continue: ")
 
-    #### FACTS
-    print "\nFacts"
-    print '-' * 50
-    pprint(nxs_test.facts)
+###### SHOW RAW TEXT
+print "\nShow raw text: "
+print '-' * 20 + " Raw Text " + '-' * 20
+print nxs_test.show("show ip arp vrf management", raw_text=True)
+print '-' * 50
+raw_input("\n\nHit a key to continue: ")
 
-    ###### SHOW
-    print "\nShow"
-    print '-' * 50
-    print nxs_test.show("show hostname")
-    print nxs_test.show("show ip arp vrf management", raw_text=True)
-    pprint(nxs_test.show("show ip arp vrf management", raw_text=False))
+###### SHOW STRUCTURED DATA
+print "\nShow structured data: "
+print '-' * 20 + " Structured " + '-' * 20
+pprint(nxs_test.show("show ip arp vrf management", raw_text=False))
+print '-' * 50
+raw_input("\n\nHit a key to continue: ")
 
-    ##### CONFIG
-    print "\nConfig"
-    print '-' * 50
-    nxs_test.config("hostname test123")
-    print nxs_test.show("show hostname")
+##### CONFIG
+print "\nConfig"
+print '-' * 50
+nxs_test.config("hostname test123")
+print nxs_test.show("show hostname")
+print '-' * 50
+raw_input("\n\nHit a key to continue: ")
 
-    nxs_test.config("hostname nxos-spine2")
-    print nxs_test.show("show hostname")
-    print
+print "\nRestore Config"
+print '-' * 50
+nxs_test.config("hostname nxos-spine1")
+print nxs_test.show("show hostname")
+print '-' * 50
+raw_input("\n\nHit a key to continue: ")
 
-    ##### RUN-CONFIG
-    print "\nRun"
-    print '-' * 50
-    run_config = nxs_test.running_config
-    print run_config
+##### RUN-CONFIG
+print "\nRun"
+print '-' * 50
+run_config = nxs_test.running_config
+print run_config
+print '-' * 50
+raw_input("\n\nHit a key to continue: ")
 
-    # pynxos methods
-    #'backup_running_config', 
-    #'checkpoint', 
-    #'config', 
-    #'config_list', 
-    #'facts', 
-    #'feature', 
-    #'file_copy', 
-    #'file_copy_remote_exists', 
-    #'get_boot_options', 
-    #'reboot', 
-    #'rollback', 
-    #'running_config', 
-    #'save', 
-    #'set_boot_options', 
-    #'show', 
-    #'show_list'
-        
+# pynxos methods
+#'backup_running_config', 
+#'checkpoint', 
+#'config', 
+#'config_list', 
+#'facts', 
+#'feature', 
+#'file_copy', 
+#'file_copy_remote_exists', 
+#'get_boot_options', 
+#'reboot', 
+#'rollback', 
+#'running_config', 
+#'save', 
+#'set_boot_options', 
+#'show', 
+#'show_list'
